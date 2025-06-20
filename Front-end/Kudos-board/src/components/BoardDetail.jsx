@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
 import Modal from './ui/Modal';
+import GiphySearch from './ui/GiphySearch';
 
-function BoardDetail({ setBoards }) {
+function BoardDetail() {
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,6 +18,7 @@ function BoardDetail({ setBoards }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formFeedback, setFormFeedback] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGiphySearchOpen, setIsGiphySearchOpen] = useState(false);
 
   const { id } = useParams();
   const boardId = parseInt(id);
@@ -240,19 +242,28 @@ function BoardDetail({ setBoards }) {
 
           <div className="form-group">
             <label htmlFor="cardGif">GIF URL *</label>
-            <input
-              type="text"
-              id="cardGif"
-              value={newCard.gif}
-              onChange={(e) => {
-                setNewCard({...newCard, gif: e.target.value});
-                if (errors.gif) {
-                  setErrors({...errors, gif: ''});
-                }
-              }}
-              className={errors.gif ? 'input-error' : ''}
-              placeholder="Leave blank for default GIF"
-            />
+            <div className="gif-input-container">
+              <input
+                type="text"
+                id="cardGif"
+                value={newCard.gif}
+                onChange={(e) => {
+                  setNewCard({...newCard, gif: e.target.value});
+                  if (errors.gif) {
+                    setErrors({...errors, gif: ''});
+                  }
+                }}
+                className={errors.gif ? 'input-error' : ''}
+                placeholder="Paste GIF URL or click search button"
+              />
+              <button
+                type="button"
+                className="search-gif-button"
+                onClick={() => setIsGiphySearchOpen(true)}
+              >
+                Find GIFs
+              </button>
+            </div>
             {errors.gif && <div className="error-message">{errors.gif}</div>}
             {newCard.gif && <img src={newCard.gif} alt="Preview" className="gif-preview" />}
           </div>
@@ -283,6 +294,25 @@ function BoardDetail({ setBoards }) {
           </button>
         </form>
       </Modal>
+
+      {isGiphySearchOpen && (
+        <Modal
+          isOpen={isGiphySearchOpen}
+          onClose={() => setIsGiphySearchOpen(false)}
+          title="Search for a GIF"
+        >
+          <GiphySearch
+            onSelect={(gifUrl) => {
+              setNewCard({...newCard, gif: gifUrl});
+              setIsGiphySearchOpen(false);
+              if (errors.gif) {
+                setErrors({...errors, gif: ''});
+              }
+            }}
+            onClose={() => setIsGiphySearchOpen(false)}
+          />
+        </Modal>
+      )}
     </div>
   );
 }

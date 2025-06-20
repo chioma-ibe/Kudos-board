@@ -1,6 +1,36 @@
 const API_URL = 'http://localhost:3001';
+const GIPHY_API_KEY = import.meta.env.VITE_GIPHY_API_KEY;
+const GIPHY_API_URL = 'https://api.giphy.com/v1/gifs';
 
 const api = {
+  getTrendingGifs: async (limit = 20) => {
+    try {
+      const response = await fetch(`${GIPHY_API_URL}/trending?api_key=${GIPHY_API_KEY}&limit=${limit}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.error('Error fetching trending GIFs:', error);
+      throw error;
+    }
+  },
+
+  searchGifs: async (query, limit = 20) => {
+    try {
+      const response = await fetch(`${GIPHY_API_URL}/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=${limit}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      console.error('Error searching GIFs:', error);
+      throw error;
+    }
+  },
+
   getBoards: async () => {
     try {
       const response = await fetch(`${API_URL}/boards`);
