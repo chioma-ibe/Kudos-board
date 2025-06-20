@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_APIURL;
 const GIPHY_API_KEY = import.meta.env.VITE_GIPHY_API_KEY;
 const GIPHY_API_URL = 'https://api.giphy.com/v1/gifs';
 
@@ -178,7 +178,7 @@ const api = {
     }
   },
 
-  // Comment related API calls
+  
   getComments: async (cardId) => {
     try {
       const response = await fetch(`${API_URL}/cards/${cardId}/comments`);
