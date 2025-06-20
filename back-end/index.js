@@ -69,7 +69,9 @@ const validateCardData = (req, res, next) => {
 };
 
 const validateIdParam = (req, res, next) => {
-  const id = parseInt(req.params.id);
+  const paramName = req.params.id ? 'id' : 'cardId';
+  const id = parseInt(req.params[paramName]);
+
   if (isNaN(id)) {
     return res.status(400).json({ error: 'Invalid ID format' });
   }
@@ -299,6 +301,7 @@ app.put('/cards/:id/vote', validateIdParam, async (req, res) => {
   }
 });
 
+
 app.delete('/cards/:id', validateIdParam, async (req, res) => {
   try {
     const existingCard = await prisma.card.findUnique({
@@ -317,6 +320,98 @@ app.delete('/cards/:id', validateIdParam, async (req, res) => {
   } catch (error) {
     console.error('Error deleting card:', error);
     res.status(500).json({ error: 'Failed to delete card' });
+  }
+});
+
+
+app.get('/cards/:cardId/comments', validateIdParam, async (req, res) => {
+  try {
+    const cardId = req.parsedId;
+
+    const card = await prisma.card.findUnique({
+      where: { id: cardId }
+    });
+
+    if (!card) {
+      return res.status(404).json({ error: 'Card not found' });
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { cardId },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Failed to fetch comments' });
+  }
+});
+
+const validateCommentData = (req, res, next) => {
+  const { message } = req.body;
+  const errors = [];
+
+  if (!message || message.trim() === '') {
+    errors.push('Message is required');
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+
+  next();
+};
+
+app.post('/cards/:cardId/comments', validateIdParam, validateCommentData, async (req, res) => {
+  try {
+    const cardId = req.parsedId;
+    const { message, author } = req.body;
+
+
+    const card = await prisma.card.findUnique({
+      where: { id: cardId }
+    });
+
+    if (!card) {
+      return res.status(404).json({ error: 'Card not found' });
+    }
+
+    const newComment = await prisma.comment.create({
+      data: {
+        message,
+        author: author || null,
+        cardId
+      }
+    });
+
+    res.status(201).json(newComment);
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    res.status(500).json({ error: 'Failed to create comment' });
+  }
+});
+
+app.delete('/comments/:id', validateIdParam, async (req, res) => {
+  try {
+    const commentId = req.parsedId;
+
+    const existingComment = await prisma.comment.findUnique({
+      where: { id: commentId }
+    });
+
+    if (!existingComment) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    await prisma.comment.delete({
+      where: { id: commentId }
+    });
+
+    res.status(200).json({ message: 'Comment deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    res.status(500).json({ error: 'Failed to delete comment' });
   }
 });
 

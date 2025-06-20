@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
 import Modal from './ui/Modal';
 import GiphySearch from './ui/GiphySearch';
 import ThemeToggle from './ui/ThemeToggle';
+import CardDetailsModal from './ui/CardDetailsModal';
 
 function BoardDetail() {
   const [board, setBoard] = useState(null);
@@ -20,9 +21,22 @@ function BoardDetail() {
   const [formFeedback, setFormFeedback] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGiphySearchOpen, setIsGiphySearchOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [isCardDetailsModalOpen, setIsCardDetailsModalOpen] = useState(false);
 
   const { id } = useParams();
   const boardId = parseInt(id);
+
+  const sortedCards = useMemo(() => {
+    if (!board || !board.cards) return [];
+
+    return [...board.cards].sort((a, b) => {
+      if (a.createdAt && b.createdAt) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return b.id - a.id;
+    });
+  }, [board]);
 
   useEffect(() => {
     const fetchBoardDetails = async () => {
@@ -136,6 +150,7 @@ function BoardDetail() {
     }
   };
 
+
   const handleDeleteCard = async (cardId) => {
     try {
       await api.deleteCard(cardId);
@@ -148,6 +163,11 @@ function BoardDetail() {
       console.error('Error deleting card:', error);
       alert('Failed to delete card. Please try again.');
     }
+  };
+
+  const handleViewCardDetails = (card) => {
+    setSelectedCard(card);
+    setIsCardDetailsModalOpen(true);
   };
 
   return (
@@ -171,7 +191,7 @@ function BoardDetail() {
 
       <div className="cards-container">
         {board.cards.length > 0 ? (
-          board.cards.map(card => (
+          sortedCards.map(card => (
             <div key={card.id} className="card">
               <h3>{card.title}</h3>
               <p>{card.description}</p>
@@ -183,6 +203,12 @@ function BoardDetail() {
                   onClick={() => handleUpvote(card.id)}
                 >
                   👍 {card.votes}
+                </button>
+                <button
+                  className="view-details-button"
+                  onClick={() => handleViewCardDetails(card)}
+                >
+                  View Details
                 </button>
                 <button
                   className="delete-button"
@@ -315,6 +341,12 @@ function BoardDetail() {
           />
         </Modal>
       )}
+
+      <CardDetailsModal
+        isOpen={isCardDetailsModalOpen}
+        onClose={() => setIsCardDetailsModalOpen(false)}
+        card={selectedCard}
+      />
     </div>
   );
 }

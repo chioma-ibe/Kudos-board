@@ -177,6 +177,55 @@ const api = {
       throw error;
     }
   },
+
+  // Comment related API calls
+  getComments: async (cardId) => {
+    try {
+      const response = await fetch(`${API_URL}/cards/${cardId}/comments`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching comments for card ${cardId}:`, error);
+      throw error;
+    }
+  },
+
+  addComment: async (cardId, commentData) => {
+    try {
+      const response = await fetch(`${API_URL}/cards/${cardId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentData),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error adding comment to card ${cardId}:`, error);
+      throw error;
+    }
+  },
+
+  deleteComment: async (commentId) => {
+    try {
+      const response = await fetch(`${API_URL}/comments/${commentId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error deleting comment ${commentId}:`, error);
+      throw error;
+    }
+  },
+
 };
 
 export default api;
