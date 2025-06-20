@@ -1,4 +1,45 @@
-/* Global Styles */
+:root {
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #555555;
+  --accent-color: #3498db;
+  --accent-hover: #2980b9;
+  --success-color: #2ecc71;
+  --success-hover: #27ae60;
+  --danger-color: #e74c3c;
+  --danger-hover: #c0392b;
+  --warning-color: #f39c12;
+  --warning-hover: #d35400;
+  --header-bg: #ffffff;
+  --footer-bg: #2c3e50;
+  --footer-text: #ffffff;
+  --card-bg: #ffffff;
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --border-color: #dddddd;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #f0f0f0;
+  --text-secondary: #cccccc;
+  --accent-color: #4dabf7;
+  --accent-hover: #339af0;
+  --success-color: #40c057;
+  --success-hover: #2f9e44;
+  --danger-color: #fa5252;
+  --danger-hover: #e03131;
+  --warning-color: #fcc419;
+  --warning-hover: #f59f00;
+  --header-bg: #1e1e1e;
+  --footer-bg: #0f0f0f;
+  --footer-text: #f0f0f0;
+  --card-bg: #2d2d2d;
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --border-color: #444444;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -16,8 +57,9 @@ html, body {
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  color: #333;
-  background-color: #f5f5f5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -37,7 +79,7 @@ body {
 
 h1, h2, h3 {
   margin-bottom: 20px;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 button {
@@ -45,32 +87,34 @@ button {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-  background-color: #3498db;
+  background-color: var(--accent-color);
   color: white;
   font-weight: 600;
   transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color: var(--accent-hover);
 }
 
 input, textarea, select {
   width: 100%;
   padding: 10px;
   margin-bottom: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 16px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .input-error {
-  border-color: #e74c3c;
-  background-color: #fdf7f7;
+  border-color: var(--danger-color);
+  background-color: rgba(231, 76, 60, 0.1);
 }
 
 .error-message {
-  color: #e74c3c;
+  color: var(--danger-color);
   font-size: 14px;
   margin-bottom: 15px;
 }
@@ -84,15 +128,15 @@ input, textarea, select {
 }
 
 .form-feedback.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: rgba(46, 204, 113, 0.2);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
 }
 
 .form-feedback.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background-color: rgba(231, 76, 60, 0.2);
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
 }
 
 textarea {
@@ -100,7 +144,6 @@ textarea {
   resize: vertical;
 }
 
-/* Home Page Styles */
 .home-page {
   display: flex;
   flex-direction: column;
@@ -108,13 +151,38 @@ textarea {
   min-height: 100vh;
 }
 
-/* Banner/Header Styles */
 .banner {
-  background-color: #fff;
+  background-color: var(--header-bg);
   padding: 15px 0;
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.theme-toggle-button {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--accent-hover);
 }
 
 .dashboard-logo {
@@ -122,7 +190,6 @@ textarea {
   height: auto;
 }
 
-/* Search Styles */
 .search {
   padding: 0 10px;
   margin-bottom: 15px;
@@ -163,14 +230,16 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s;
   height: 42px;
-  line-height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .search-button:hover, .clear-button:hover {
   background-color: #00796b; /* Darker teal */
 }
 
-/* Category Buttons Styles */
 .category-buttons {
   display: flex;
   justify-content: center;
@@ -181,25 +250,25 @@ textarea {
 }
 
 .category-buttons button {
-  background-color: #ecf0f1;
-  color: #2c3e50;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
   padding: 10px 20px;
   font-size: 1rem;
+  border: 1px solid var(--border-color);
 }
 
 .category-buttons button.active {
-  background-color: #3498db;
+  background-color: var(--accent-color);
   color: white;
+  border: 1px solid var(--accent-color);
 }
 
-/* Center Button Container Styles */
 .center-button-container {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-/* Board Grid Styles */
 .board-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -208,7 +277,6 @@ textarea {
   margin-bottom: 20px;
 }
 
-/* Responsive Media Queries */
 @media (max-width: 768px) {
   .board-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -306,10 +374,10 @@ textarea {
 }
 
 .board-preview {
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   transition: transform 0.3s;
   display: flex;
   flex-direction: column;
@@ -352,23 +420,23 @@ textarea {
 }
 
 .view-board {
-  background-color: #2ecc71;
+  background-color: var(--success-color);
   color: white;
   text-decoration: none;
 }
 
 .view-board:hover {
-  background-color: #27ae60;
+  background-color: var(--success-hover);
 }
 
 .delete-board {
-  background-color: #e74c3c;
+  background-color: var(--danger-color);
   color: white;
   border: none;
 }
 
 .delete-board:hover {
-  background-color: #c0392b;
+  background-color: var(--danger-hover);
 }
 
 
@@ -378,7 +446,7 @@ textarea {
   display: inline-block;
   width: auto;
   min-width: 150px;
-  background-color: #2ecc71;
+  background-color: var(--success-color);
   color: white;
   text-decoration: none;
   border-radius: 4px;
@@ -387,13 +455,12 @@ textarea {
 }
 
 .create-button:hover {
-  background-color: #27ae60;
+  background-color: var(--success-hover);
 }
 
-/* Footer Styles */
 footer {
-  background-color: #2c3e50;
-  color: white;
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
   text-align: center;
   padding: 10px;
   margin-top: auto;
@@ -402,18 +469,17 @@ footer {
 .empty-state {
   text-align: center;
   padding: 40px;
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   grid-column: 1 / -1;
 }
 
-/* Create Board Styles */
 .create-board {
-  background-color: white;
+  background-color: var(--card-bg);
   padding: 40px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
@@ -498,14 +564,13 @@ footer {
 }
 
 .submit-button {
-  background-color: #2ecc71;
+  background-color: var(--success-color);
 }
 
 .submit-button:hover {
-  background-color: #27ae60;
+  background-color: var(--success-hover);
 }
 
-/* Board Detail Styles */
 .board-detail {
   display: flex;
   flex-direction: column;
@@ -514,10 +579,10 @@ footer {
 }
 
 .board-header {
-  background-color: white;
+  background-color: var(--card-bg);
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   position: relative;
   text-align: center;
 }
@@ -537,7 +602,7 @@ footer {
 .back-button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #3498db;
+  background-color: var(--accent-color);
   color: white;
   text-decoration: none;
   border-radius: 4px;
@@ -548,7 +613,7 @@ footer {
 }
 
 .back-button:hover {
-  background-color: #2980b9;
+  background-color: var(--accent-hover);
 }
 
 .cards-container {
@@ -612,7 +677,6 @@ footer {
   margin: 0;
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;

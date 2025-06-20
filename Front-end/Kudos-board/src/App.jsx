@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard'
 import CreateBoard from './components/CreateBoard'
 import BoardDetail from './components/BoardDetail'
 import api from './services/api'
+import { ThemeProvider } from './context/ThemeContext'
 
 function App() {
   const [boards, setBoards] = useState([]);
@@ -32,26 +33,30 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="app">
-        <Routes>
-          <Route path="/" element={
-            <Dashboard
-              boards={boards}
-              setBoards={setBoards}
-              activeFilter={activeFilter}
-              setActiveFilter={setActiveFilter}
-            />
-          } />
-          <Route path="/create-board" element={
-            <CreateBoard boards={boards} setBoards={setBoards} />
-          } />
-          <Route path="/board/:id" element={
-            <BoardDetail boards={boards} setBoards={setBoards} />
-          } />
-        </Routes>
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="app">
+          <Routes>
+            <Route path="/" element={
+              <Dashboard
+                boards={boards}
+                setBoards={setBoards}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                loading={loading}
+                error={error}
+              />
+            } />
+            <Route path="/create-board" element={
+              <CreateBoard boards={boards} setBoards={setBoards} />
+            } />
+            <Route path="/board/:id" element={
+              <BoardDetail boards={boards} setBoards={setBoards} />
+            } />
+          </Routes>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

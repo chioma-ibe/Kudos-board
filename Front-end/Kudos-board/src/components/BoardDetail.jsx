@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import api from '../services/api';
 import Modal from './ui/Modal';
 import GiphySearch from './ui/GiphySearch';
+import ThemeToggle from './ui/ThemeToggle';
 
 function BoardDetail() {
   const [board, setBoard] = useState(null);
@@ -156,6 +157,7 @@ function BoardDetail() {
         <p>{board.description}</p>
         <p className="author">By: {board.author}</p>
         <Link to="/" className="back-button">Back to Dashboard</Link>
+        <ThemeToggle />
       </div>
 
       <div className="center-button-container">

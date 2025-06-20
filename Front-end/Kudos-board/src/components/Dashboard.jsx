@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import SearchBar from './ui/SearchBar';
 import CategoryFilter from './ui/CategoryFilter';
+import ThemeToggle from './ui/ThemeToggle';
 
 function Dashboard({ boards, setBoards, activeFilter, setActiveFilter, loading }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,6 +40,7 @@ function Dashboard({ boards, setBoards, activeFilter, setActiveFilter, loading }
           alt="Kudos Board Logo"
           className="dashboard-logo"
         />
+        <ThemeToggle />
       </header>
 
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
