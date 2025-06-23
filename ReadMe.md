@@ -4,8 +4,7 @@
 
 Submitted by: **Chioma Ibe**
 
-Deployed Application (**required**): [Kudos Board Deployed Site]https://www.loom.com/share/ddb96d2c89f74df9ae671da3d129cb9b?sid=7e19abd0-7977-4fec-bef4-bcd01373d2f5
-
+Deployed Application (**required**): [Kudos Board Deployed Site] https://kudos-board-1-tcqc.onrender.com
 ### Application Features
 
 #### CORE FEATURES
